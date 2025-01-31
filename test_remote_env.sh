@@ -1,5 +1,14 @@
 # initialize and set up remote TPU VM
-source ka.sh # import VM_NAME, ZONE
+# source ka.sh # import VM_NAME, ZONE
+
+# test whether $1 is empty
+if [ -z "$1" ]; then
+    source ka.sh # import VM_NAME, ZONE
+else
+    echo use command line arguments
+    export VM_NAME=$1
+    export ZONE=$2
+fi
 
 echo $VM_NAME $ZONE
 

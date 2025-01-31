@@ -16,10 +16,13 @@ if [[ $VM_NAME == *"preemptible"* ]]; then
     --preemptible
     if [ "$(gcloud compute tpus describe $VM_NAME --zone=$ZONE --format="value(state)")" == "READY" ]; then
         echo "Now, TPU VM $VM_NAME is good, ready to use"
-        bash init_preemptible_remote.sh
-        bash test_remote_env.sh
+        bash init_preemptible_remote.sh $VM_NAME $ZONE
+        bash test_remote_env.sh $VM_NAME $ZONE
     else
         echo "TPU is still not ready, please check"
         return 1
     fi
+else
+    echo "The VM $VM_NAME is not preemptible"
+    return 1
 fi
