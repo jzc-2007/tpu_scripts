@@ -46,3 +46,5 @@ echo 'Current dir: '
 pwd
 source 装牛牛X.sh
 "
+
+source setup_remote_wandb.sh
