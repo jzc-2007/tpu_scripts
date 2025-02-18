@@ -42,7 +42,7 @@ class SheetManager:
 
     def sanity(self):
         worksheet = self.worksheet
-        assert all([worksheet.acell(cell).value == "SANITY" for cell in ["A6","J6","A25","J25"]]), "Sanity check failed: {}".format([worksheet.acell(cell).value for cell in ["A6","J6","A25","J25"]])
+        assert all([worksheet.acell(cell).value == "SANITY" for cell in ["A6","J6","A26","J26"]]), "Sanity check failed: {}".format([worksheet.acell(cell).value for cell in ["A6","J6","A26","J26"]])
         self.log("Sanity check passed")
         
     def get_times(self):
@@ -86,7 +86,7 @@ class SheetManager:
     
     def check_ka(self):
         all_to_check = [
-            "v3-32-1", "v3-32-11", "v3-32-12", "v3-32-13", "v2-32-1", "v2-32-2", "v2-32-3", "v2-32-4", "v2-32-5", "v2-32-6", "v2-32-7", "v2-32-preemptible-1", "v2-32-preemptible-2", "v3-32-preemptible-1"
+            "v3-32-1", "v3-32-11", "v3-32-12", "v3-32-13", "v2-32-1", "v2-32-2", "v2-32-3", "v2-32-4", "v2-32-5", "v2-32-6", "v2-32-7", "v2-32-8", "v2-32-preemptible-1", "v2-32-preemptible-2", "v3-32-preemptible-1"
         ]
         all_to_check = ['kmh-tpuvm-' + ka for ka in all_to_check]
         for idx, ka in enumerate(all_to_check):
@@ -98,19 +98,21 @@ class SheetManager:
             status_to_write = self.worksheet.acell(f"D{row_num}").value
             user_to_write = self.worksheet.acell(f"E{row_num}").value
             desc_to_write = self.worksheet.acell(f"F{row_num}").value
-            self.log(f"Last status: {status_to_write}, user: {user_to_write}, desc: {desc_to_write}")
-            script_to_write = ""
+            old_script_to_write = self.worksheet.acell(f"G{row_num}").value
+            replace = False; script_to_write = ""
+            self.log(f"Last status: {status_to_write}, user: {user_to_write}, desc: {desc_to_write}, script: {old_script_to_write}")
+            # script_to_write = ""
             
             # fix invalid cell
             if status_to_write == "running":
                 if user_to_write in ["闲的", "UNKNOWN"]:
                     # unknown user uses this card
-                    script_to_write += "[Invalid cell] The ka is running but the user is unknown! "
+                    script_to_write += "[Invalid cell] The ka is running but the user is unknown! "; replace = True
                     user_to_write = "UNKNOWN"
             elif status_to_write == "闲的":
                 if user_to_write not in ["闲的", "UNKNOWN"]:
                     # this is likely that the person forget to set the status to running/reserved
-                    script_to_write += "[Invalid cell] The status used to not be 'running', we believe this is a mistake. "
+                    script_to_write += "[Invalid cell] The status used to not be 'running', we believe this is a mistake. "; replace = True
                     status_to_write = "reserved"
                 elif user_to_write == "UNKNOWN":
                     # useless
@@ -118,7 +120,7 @@ class SheetManager:
             elif status_to_write == "reserved":
                 if user_to_write in ["闲的", "UNKNOWN"]:
                     # completely invalid
-                    script_to_write += "[Invalid cell] The ka is reserved but the user is unknown! "
+                    script_to_write += "[Invalid cell] The ka is reserved but the user is unknown! "; replace = True
                     user_to_write = "闲的"
                     status_to_write = "闲的"
                     
@@ -130,35 +132,37 @@ class SheetManager:
             
             # update using the script result
             if result == "internal error":
-                script_to_write += "[Script] The shell script failed to run"
+                script_to_write += "[Script] The shell script failed to run"; replace = True
             elif result in ["preeempted", "env broken"]:
                 # The ka must NOT be running. The user may not know this.
                 if status_to_write == "running":
-                    script_to_write += f"[Script] The run by user {user_to_write} is done or failed, as the ka is now {result}. "
+                    script_to_write += f"[Script] The run by user {user_to_write} is done or failed, as the ka is now {result}. "; replace = True
                     status_to_write = "闲的"
                     user_to_write = "闲的"
-                script_to_write = f"[Script] The ka is now {result}. " + script_to_write
+                script_to_write = f"[Script] The ka is now {result}. " + script_to_write; replace = True
             elif result == "xian":
                 # the run is finished
                 if status_to_write == "running":
                     if user_to_write != "UNKNOWN":
                         status_to_write = "reserved"
-                        script_to_write += "[Script] The run is finished, switch status to reserved. "
+                        script_to_write += "[Script] The run is finished, switch status to reserved. "; replace = True
                     else:
-                        script_to_write += "[Script] The run is finished, and the user is unknown. "
+                        script_to_write += "[Script] The run is finished, and the user is unknown. "; replace = True
             elif result == "running":
                 if status_to_write == "闲的":
                     # the user may not know the status
-                    script_to_write += "[Script] The ka is running, but no one knows! "
+                    script_to_write += "[Script] The ka is running, but no one knows! "; replace = True
                     status_to_write = "running"
                     user_to_write = "UNKNOWN"
                 elif status_to_write == "reserved":
                     # the run is still running
                     status_to_write = "running"
-                    script_to_write += "[Script] The reserved card is running. "                    
+                    script_to_write += "[Script] The reserved card is running. "; replace = True                  
             else:
                 raise NotImplementedError("Invalid result: {}".format(result))
             
+            if not replace:
+                script_to_write = old_script_to_write
             # col: D: status, E: user, F: desc, G: script log
             self.worksheet.update([[status_to_write, user_to_write,desc_to_write, script_to_write]], f'D{row_num}:H{row_num+1}')
 
