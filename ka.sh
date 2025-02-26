@@ -26,6 +26,7 @@ fi
 # export VM_NAME=kmh-tpuvm-v2-32-7
 # export VM_NAME=kmh-tpuvm-v2-32-8
 # export VM_NAME=kmh-tpuvm-v3-32-1
+export VM_NAME=kmh-tpuvm-v4-8-6
 # export VM_NAME=kmh-tpuvm-v2-32-preemptible-1
 # export VM_NAME=kmh-tpuvm-v2-32-preemptible-2
 # export VM_NAME=kmh-tpuvm-v3-32-preemptible-1
@@ -37,7 +38,10 @@ fi
 
 # Zone: your TPU VM zone
 
-if [[ $VM_NAME == *"v3"* ]]; then
+# Zone: your TPU VM zone
+if [[ $VM_NAME == *"v4"* ]]; then
+    export ZONE=us-central2-b
+elif [[ $VM_NAME == *"v3"* ]]; then
     export ZONE=europe-west4-a
 else
     if [[ $VM_NAME == *"v2-32-4"* ]]; then

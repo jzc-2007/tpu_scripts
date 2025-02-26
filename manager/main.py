@@ -41,8 +41,9 @@ class SheetManager:
         self.worksheet = spreadsheet.worksheet(self.sheet_name)
 
     def sanity(self):
+        SANITY_ROW = 27 # change me
         worksheet = self.worksheet
-        assert all([worksheet.acell(cell).value == "SANITY" for cell in ["A6","J6","A26","J26"]]), "Sanity check failed: {}".format([worksheet.acell(cell).value for cell in ["A6","J6","A26","J26"]])
+        assert all([worksheet.acell(cell).value == "SANITY" for cell in ["A6","J6",f"A{SANITY_ROW}",f"J{SANITY_ROW}"]]), "Sanity check failed: {}".format([worksheet.acell(cell).value for cell in ["A6","J6",f"A{SANITY_ROW}",f"J{SANITY_ROW}"]])
         self.log("Sanity check passed")
         
     def get_times(self):
@@ -86,7 +87,7 @@ class SheetManager:
     
     def check_ka(self):
         all_to_check = [
-            "v3-32-1", "v3-32-11", "v3-32-12", "v3-32-13", "v2-32-1", "v2-32-2", "v2-32-3", "v2-32-4", "v2-32-5", "v2-32-6", "v2-32-7", "v2-32-8", "v2-32-preemptible-1", "v2-32-preemptible-2", "v3-32-preemptible-1"
+            "v3-32-1", "v3-32-11", "v3-32-12", "v3-32-13", "v2-32-1", "v2-32-2", "v2-32-3", "v2-32-4", "v2-32-5", "v2-32-6", "v2-32-7", "v2-32-8", "v4-8-6", "v2-32-preemptible-1", "v2-32-preemptible-2", "v3-32-preemptible-1"
         ]
         all_to_check = ['kmh-tpuvm-' + ka for ka in all_to_check]
         for idx, ka in enumerate(all_to_check):
