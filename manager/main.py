@@ -89,7 +89,7 @@ class SheetManager:
             raise exc_type(exc_value)
     
     def check_ka(self):
-        # all_to_check = ["v3-32-1"] # debug
+        # all_to_check = ["v3-32-1", "v3-32-11"] # debug
         all_to_check = [
             "v3-32-1", "v3-32-11", "v3-32-12", "v3-32-13", "v2-32-1", "v2-32-2", "v2-32-3", "v2-32-4", "v2-32-5", "v2-32-6", "v2-32-7", "v2-32-8", "v4-8-6", "v2-32-preemptible-1", "v2-32-preemptible-2", "v3-32-preemptible-1"
         ]
@@ -97,8 +97,14 @@ class SheetManager:
         all_to_check = ['kmh-tpuvm-' + ka for ka in all_to_check]
         # read from the sheet
         all_to_read = self.worksheet.batch_get([f"D9:G{8+len(all_to_check)}"])[0]
-        assert len(all_to_read) == len(all_to_check), f"{len(all_to_read)} != {len(all_to_check)}"
-        assert len(all_to_read[0]) == 4, f"{len(all_to_read[0])} != 4"
+        def pad(l):
+            assert len(l) <= 4
+            while len(l) < 4:
+                l.append("")
+            return l
+        all_to_read = list(map(pad, all_to_read))
+        assert len(all_to_read) == len(all_to_check), all_to_read
+        assert all(len(c) == 4 for c in all_to_read), all_to_read
         
         # parallel get status of ka
         all_results = []
