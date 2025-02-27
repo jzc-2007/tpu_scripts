@@ -8,6 +8,9 @@ import pytz
 from ka_checker import check_ka
 import signal
 
+# parallel execution
+from concurrent.futures import ThreadPoolExecutor
+
 def signal_handler(sig, frame):
     print('Sending final logs to the sheet, please do not interrupt...')
 
@@ -90,9 +93,18 @@ class SheetManager:
             "v3-32-1", "v3-32-11", "v3-32-12", "v3-32-13", "v2-32-1", "v2-32-2", "v2-32-3", "v2-32-4", "v2-32-5", "v2-32-6", "v2-32-7", "v2-32-8", "v4-8-6", "v2-32-preemptible-1", "v2-32-preemptible-2", "v3-32-preemptible-1"
         ]
         all_to_check = ['kmh-tpuvm-' + ka for ka in all_to_check]
+        
+        # parallel
+        all_results = []
+        with ThreadPoolExecutor(max_workers=8) as executor:
+            all_results = executor.map(check_ka, all_to_check)
+        all_results = list(all_results)
+        assert len(all_results) == len(all_to_check)
+        
         for idx, ka in enumerate(all_to_check):
             self.log(f"Checking {ka}")
-            result = check_ka(ka)
+            # result = check_ka(ka)
+            result = all_results[idx]
             self.log(f"Result: {result}")
             row_num = idx + 9
             
