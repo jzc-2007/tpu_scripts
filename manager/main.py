@@ -89,18 +89,25 @@ class SheetManager:
             raise exc_type(exc_value)
     
     def check_ka(self):
+        # all_to_check = ["v3-32-1"] # debug
         all_to_check = [
             "v3-32-1", "v3-32-11", "v3-32-12", "v3-32-13", "v2-32-1", "v2-32-2", "v2-32-3", "v2-32-4", "v2-32-5", "v2-32-6", "v2-32-7", "v2-32-8", "v4-8-6", "v2-32-preemptible-1", "v2-32-preemptible-2", "v3-32-preemptible-1"
         ]
+
         all_to_check = ['kmh-tpuvm-' + ka for ka in all_to_check]
+        # read from the sheet
+        all_to_read = self.worksheet.batch_get([f"D9:G{8+len(all_to_check)}"])[0]
+        assert len(all_to_read) == len(all_to_check), f"{len(all_to_read)} != {len(all_to_check)}"
+        assert len(all_to_read[0]) == 4, f"{len(all_to_read[0])} != 4"
         
-        # parallel
+        # parallel get status of ka
         all_results = []
         with ThreadPoolExecutor(max_workers=8) as executor:
             all_results = executor.map(check_ka, all_to_check)
         all_results = list(all_results)
         assert len(all_results) == len(all_to_check)
-        
+
+        all_to_write = []        
         for idx, ka in enumerate(all_to_check):
             self.log(f"Checking {ka}")
             # result = check_ka(ka)
@@ -108,10 +115,9 @@ class SheetManager:
             self.log(f"Result: {result}")
             row_num = idx + 9
             
-            status_to_write = self.worksheet.acell(f"D{row_num}").value
-            user_to_write = self.worksheet.acell(f"E{row_num}").value
-            desc_to_write = self.worksheet.acell(f"F{row_num}").value
-            old_script_to_write = self.worksheet.acell(f"G{row_num}").value
+            # access once
+            # status_to_write, user_to_write, desc_to_write, old_script_to_write = accessed[0][0]
+            status_to_write, user_to_write, desc_to_write, old_script_to_write = all_to_read[idx]
             replace = False; script_to_write = ""
             self.log(f"Last status: {status_to_write}, user: {user_to_write}, desc: {desc_to_write}, script: {old_script_to_write}")
             # script_to_write = ""
@@ -177,7 +183,10 @@ class SheetManager:
             if not replace:
                 script_to_write = old_script_to_write
             # col: D: status, E: user, F: desc, G: script log
-            self.worksheet.update([[status_to_write, user_to_write,desc_to_write, script_to_write]], f'D{row_num}:H{row_num+1}')
+            # self.worksheet.update([[status_to_write, user_to_write,desc_to_write, script_to_write]], f'D{row_num}:H{row_num+1}')
+            all_to_write.append([status_to_write, user_to_write, desc_to_write, script_to_write])
+        
+        self.worksheet.update(all_to_write, f'D9:H{9+len(all_to_check)}')
 
 if __name__ == '__main__':
     with SheetManager() as sm:
