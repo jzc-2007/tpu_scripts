@@ -95,6 +95,15 @@ class SheetManager:
         ]
 
         all_to_check = ['kmh-tpuvm-' + ka for ka in all_to_check]
+        
+        # parallel get status of ka
+        all_results = []
+        with ThreadPoolExecutor(max_workers=8) as executor:
+            all_results = executor.map(check_ka, all_to_check)
+        all_results = list(all_results)
+        assert len(all_results) == len(all_to_check)
+        
+        
         # read from the sheet
         all_to_read = self.worksheet.batch_get([f"D9:G{8+len(all_to_check)}"])[0]
         def pad(l):
@@ -106,13 +115,6 @@ class SheetManager:
         assert len(all_to_read) == len(all_to_check), all_to_read
         assert all(len(c) == 4 for c in all_to_read), all_to_read
         
-        # parallel get status of ka
-        all_results = []
-        with ThreadPoolExecutor(max_workers=8) as executor:
-            all_results = executor.map(check_ka, all_to_check)
-        all_results = list(all_results)
-        assert len(all_results) == len(all_to_check)
-
         all_to_write = []        
         for idx, ka in enumerate(all_to_check):
             self.log(f"Checking {ka}")
@@ -158,7 +160,7 @@ class SheetManager:
             # update using the script result
             if result == "internal error":
                 script_to_write += "[Script] The shell script failed to run"; replace = True
-            elif result in ["preeempted", "env broken"]:
+            elif result in ["preeempted", "env broken", "timeout"]:
                 # The ka must NOT be running. The user may not know this.
                 if status_to_write == "running":
                     script_to_write += f"[Script] The run by user {user_to_write} is done or failed, as the ka is now {result}. "; replace = True

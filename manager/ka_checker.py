@@ -20,14 +20,18 @@ def get_zone(ka):
         
 def check_ka(ka):
     zone = get_zone(ka)
-    run = subprocess.run(["bash", "get_ka_status.sh", ka, zone])
-    code = run.returncode
+    try:
+        run = subprocess.run(["bash", "get_ka_status.sh", ka, zone], timeout=40)
+        code = run.returncode
+    except subprocess.TimeoutExpired:
+        code = 5
     return {
         0: "xian",
         1: "running",
         2: "internal error",
         3: "preeempted",
-        4: "env broken"
+        4: "env broken",
+        5: "timeout"
     }[code]
     
 if __name__ == '__main__':
