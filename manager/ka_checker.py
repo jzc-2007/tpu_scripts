@@ -5,15 +5,11 @@ ZONE_US = "us-central1-a"
 ZONE_US_2 = "us-central2-b"
 
 def get_zone(ka):
-    if "v2-32-preemptible-1" in ka:
-        return ZONE_US
-    elif "preemptible" in ka:
-        return ZONE_EU
-    elif "v4" in ka:
+    if 'v4' in ka:
         return ZONE_US_2
     elif "v3" in ka:
         return ZONE_EU
-    elif "v2-32-4" in ka:
+    elif ka in ['v2-32-preemptible-1', 'v2-32-4']:
         return ZONE_EU
     else:
         return ZONE_US

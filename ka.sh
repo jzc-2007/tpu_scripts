@@ -26,10 +26,12 @@ fi
 # export VM_NAME=kmh-tpuvm-v2-32-7
 # export VM_NAME=kmh-tpuvm-v2-32-8
 # export VM_NAME=kmh-tpuvm-v3-32-1
-export VM_NAME=kmh-tpuvm-v4-8-6
+# export VM_NAME=kmh-tpuvm-v4-8-6
 # export VM_NAME=kmh-tpuvm-v2-32-preemptible-1
 # export VM_NAME=kmh-tpuvm-v2-32-preemptible-2
 # export VM_NAME=kmh-tpuvm-v3-32-preemptible-1
+export VM_NAME=kmh-tpuvm-v4-32-preemptible-1
+# export VM_NAME=kmh-tpuvm-v4-32-preemptible-2
 # export VM_NAME=kmh-tpuvm-v3-32-11
 # export VM_NAME=kmh-tpuvm-v3-32-12
 # export VM_NAME=kmh-tpuvm-v3-32-13
@@ -46,17 +48,11 @@ elif [[ $VM_NAME == *"v3"* ]]; then
 else
     if [[ $VM_NAME == *"v2-32-4"* ]]; then
         export ZONE=europe-west4-a
+    elif [[ $VM_NAME == *"v2-32-preemptible-1"* ]]; then
+        export ZONE=europe-west4-a
     else
         export ZONE=us-central1-a
     fi
-fi
-
-if [[ $VM_NAME == *"preemptible"* ]]; then
-    export ZONE=europe-west4-a
-fi
-
-if [[ $VM_NAME == *"v2-32-preemptible-1"* ]]; then
-    export ZONE=us-central1-a
 fi
 
 # DATA_ROOT: the disk mounted
@@ -70,13 +66,14 @@ if [[ $ZONE == *"europe"* ]]; then
     export USE_CONDA=1
 else
     export DATA_ROOT="kmh-nfs-us-mount"
-    export USE_CONDA=2
+    export USE_CONDA=1
     # export TFDS_DATA_DIR='gs://kmh-gcp-us-central2/tensorflow_datasets'  # use this for imagenet
     export TFDS_DATA_DIR='/kmh-nfs-us-mount/data/tensorflow_datasets'
 fi
 
 if [[ $USE_CONDA == 1 ]]; then
-    export CONDA_PATH=$(which conda)
-    export CONDA_INIT_SH_PATH=$(dirname $CONDA_PATH)/../etc/profile.d/conda.sh
+    # export CONDA_PATH=$(which conda)
+    # export CONDA_INIT_SH_PATH=$(dirname $CONDA_PATH)/../etc/profile.d/conda.sh
+    export CONDA_INIT_SH_PATH=/$DATA_ROOT/code/qiao/anaconda3/etc/profile.d/conda.sh
     export CONDA_ENV=$OWN_CONDA_ENV_NAME
 fi

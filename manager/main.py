@@ -21,6 +21,7 @@ class SheetManager:
         self.sheet_name = sheet_name
         self.connect()
         self.logs = []
+        self.ka_to_check = []
     
     def __enter__(self):
         self.connect()
@@ -44,9 +45,24 @@ class SheetManager:
         self.worksheet = spreadsheet.worksheet(self.sheet_name)
 
     def sanity(self):
-        SANITY_ROW = 27 # change me
         worksheet = self.worksheet
-        assert all([worksheet.acell(cell).value == "SANITY" for cell in ["A6","J6",f"A{SANITY_ROW}",f"J{SANITY_ROW}"]]), "Sanity check failed: {}".format([worksheet.acell(cell).value for cell in ["A6","J6",f"A{SANITY_ROW}",f"J{SANITY_ROW}"]])
+        all_to_read = self.worksheet.batch_get([f"B9:C40"])[0]
+        assert all([worksheet.acell(cell).value == "SANITY" for cell in ["A6","J6"]]), "Sanity check failed: {}".format([worksheet.acell(cell).value for cell in ["A6","J6"]])
+        row = 9
+        while True:
+            try:
+                ka = all_to_read[row-9][0]
+                row += 1
+            except IndexError as e:
+                raise RuntimeError('too much ka!') from e
+            print('get:', ka)
+            if ka.startswith("local"):
+                continue
+            if ka == "STOP":
+                break
+            self.ka_to_check.append(ka)
+        row -= 1
+        assert all([worksheet.acell(cell).value == "SANITY" for cell in [f"A{row}",f"J{row}"]]), "Sanity check failed: {}".format([worksheet.acell(cell).value for cell in [f"A{row}",f"J{row}"]])
         self.log("Sanity check passed")
         
     def get_times(self):
@@ -90,9 +106,8 @@ class SheetManager:
     
     def check_ka(self):
         # all_to_check = ["v3-32-1", "v3-32-11"] # debug
-        all_to_check = [
-            "v3-32-1", "v3-32-11", "v3-32-12", "v3-32-13", "v2-32-1", "v2-32-2", "v2-32-3", "v2-32-4", "v2-32-5", "v2-32-6", "v2-32-7", "v2-32-8", "v4-8-6", "v2-32-preemptible-1", "v2-32-preemptible-2", "v3-32-preemptible-1"
-        ]
+        all_to_check = self.ka_to_check
+        self.log('Ka to check: {}'.format(all_to_check))
 
         all_to_check = ['kmh-tpuvm-' + ka for ka in all_to_check]
         
