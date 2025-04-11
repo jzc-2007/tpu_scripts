@@ -47,4 +47,4 @@ ls /kmh-nfs-ssd-eu-mount
 #source 装牛牛X.sh
 #"
 
-source setup_remote_wandb.sh
+bash setup_remote_wandb.sh $VM_NAME $ZONE

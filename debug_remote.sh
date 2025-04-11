@@ -21,26 +21,12 @@ sudo mkdir -p ${LOGDIR}
 sudo chmod 777 -R ${LOGDIR}
 echo 'Log dir: '$LOGDIR
 
-
-if [[ $USE_CONDA == 1 ]]; then
-    CONDA_PATH=$(which conda)
-    CONDA_INIT_SH_PATH=$(dirname $CONDA_PATH)/../etc/profile.d/conda.sh
-fi
-
 gcloud compute tpus tpu-vm ssh $VM_NAME --zone $ZONE \
     --worker=all --command "
 cd $STAGEDIR
 echo 'Current dir: '
 pwd
-if [ \"$USE_CONDA\" -eq 1 ]; then
-    echo 'Using conda'
-    source $CONDA_INIT_SH_PATH
-    conda activate $CONDA_ENV
-fi
-which python
-which pip3
-export TFDS_DATA_DIR=${TFDS_DATA_DIR}
-python3 main.py \
+$CONDA_PY_PATH main.py \
     --workdir=${LOGDIR} \
     --mode=remote_debug \
     --config=configs/load_config.py:remote_debug \

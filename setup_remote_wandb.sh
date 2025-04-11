@@ -7,27 +7,45 @@ else
     echo use command line arguments
     export VM_NAME=$1
     export ZONE=$2
+
+    if [[ $VM_NAME == *"v4"* ]]; then
+        export ZONE=us-central2-b
+    elif [[ $VM_NAME == *"v3"* ]]; then
+        export ZONE=europe-west4-a
+    else
+        if [[ $VM_NAME == *"v2-32-4"* ]]; then
+            export ZONE=europe-west4-a
+        elif [[ $VM_NAME == *"v2-32-preemptible-1"* ]]; then
+            export ZONE=europe-west4-a
+        else
+            export ZONE=us-central1-a
+        fi
+    fi
+
+    if [[ $ZONE == *"europe"* ]]; then
+        export DATA_ROOT="kmh-nfs-ssd-eu-mount"
+        # export TFDS_DATA_DIR='gs://kmh-gcp/tensorflow_datasets'  # use this for imagenet
+        export TFDS_DATA_DIR='/kmh-nfs-ssd-eu-mount/code/hanhong/dot/tensorflow_datasets'
+        export USE_CONDA=1
+    else
+        export DATA_ROOT="kmh-nfs-us-mount"
+        export USE_CONDA=1
+        # export TFDS_DATA_DIR='gs://kmh-gcp-us-central2/tensorflow_datasets'  # use this for imagenet
+        export TFDS_DATA_DIR='/kmh-nfs-us-mount/data/tensorflow_datasets'
+    fi
+
+    if [[ $USE_CONDA == 1 ]]; then
+        export CONDA_PY_PATH=/$DATA_ROOT/code/qiao/anaconda3/envs/$OWN_CONDA_ENV_NAME/bin/python
+        echo $CONDA_PY_PATH
+    fi
+
 fi
 
 echo $VM_NAME $ZONE
 
-CONDA_ENV=$OWN_CONDA_ENV_NAME
-
-# if [[ $USE_CONDA == 1 ]]; then
-#     CONDA_PATH=$(which conda)
-#     CONDA_INIT_SH_PATH=$(dirname $CONDA_PATH)/../etc/profile.d/conda.sh
-# fi
-
 gcloud compute tpus tpu-vm ssh $VM_NAME --zone $ZONE \
     --worker=all --command "
-if [ \"$USE_CONDA\" -eq 1 ]; then
-    echo 'Using conda'
-    source $CONDA_INIT_SH_PATH
-    conda activate $CONDA_ENV
-fi
-which python3
-which pip3
-python3 -m wandb login $WANDB_API_KEY
+$CONDA_PY_PATH -m wandb login $WANDB_API_KEY
 sleep 1
-python3 -m wandb login
+$CONDA_PY_PATH -m wandb login
 "

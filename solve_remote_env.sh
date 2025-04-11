@@ -3,7 +3,8 @@ source ka.sh # import VM_NAME, ZONE
 echo 'solve'
 gcloud compute tpus tpu-vm ssh $VM_NAME --zone $ZONE --worker=all \
     --command "
-sudo lsof -w /dev/accel0
+alias python=$CONDA_PY_PATH
+alias pip=$CONDA_PIP_PATH
 " # &> /dev/null
 echo 'solved!'
 # ls /home/sqa

@@ -1,6 +1,4 @@
 # 卡.sh
-
-# This is the newest script on 2025.4.11 12:16
 source config.sh
 
 if [ -z "$OWN_CONDA_ENV_NAME" ]; then
@@ -26,13 +24,13 @@ fi
 # export VM_NAME=kmh-tpuvm-v2-32-5
 # export VM_NAME=kmh-tpuvm-v2-32-6
 # export VM_NAME=kmh-tpuvm-v2-32-7
-# export VM_NAME=kmh-tpuvm-v2-32-8
+export VM_NAME=kmh-tpuvm-v2-32-8
 # export VM_NAME=kmh-tpuvm-v3-32-1
 # export VM_NAME=kmh-tpuvm-v4-8-6
 # export VM_NAME=kmh-tpuvm-v2-32-preemptible-1
 # export VM_NAME=kmh-tpuvm-v2-32-preemptible-2
 # export VM_NAME=kmh-tpuvm-v3-32-preemptible-1
-export VM_NAME=kmh-tpuvm-v4-32-preemptible-1
+# export VM_NAME=kmh-tpuvm-v4-32-preemptible-1
 # export VM_NAME=kmh-tpuvm-v4-32-preemptible-2
 # export VM_NAME=kmh-tpuvm-v3-32-11
 # export VM_NAME=kmh-tpuvm-v3-32-12
@@ -74,8 +72,43 @@ else
 fi
 
 if [[ $USE_CONDA == 1 ]]; then
-    export CONDA_PY_PATH=/$DATA_ROOT/code/qiao/anaconda3/envs/$OWN_CONDA_ENV_NAME/bin/python
-    export CONDA_PIP_PATH=/$DATA_ROOT/code/qiao/anaconda3/envs/$OWN_CONDA_ENV_NAME/bin/pip
-    echo $CONDA_PY_PATH
-    echo $CONDA_PIP_PATH
+    # export CONDA_PATH=$(which conda)
+    # export CONDA_INIT_SH_PATH=$(dirname $CONDA_PATH)/../etc/profile.d/conda.sh
+    export CONDA_INIT_SH_PATH=/$DATA_ROOT/code/qiao/anaconda3/etc/profile.d/conda.sh
+    export CONDA_ENV=$OWN_CONDA_ENV_NAME
 fi
+
+
+echo $VM_NAME $ZONE
+
+
+# if [ \"$USE_CONDA\" -eq 1 ]; then
+#     echo 'Using conda'
+#     source $CONDA_INIT_SH_PATH
+#     echo tmp 1
+# fi
+
+gcloud compute tpus tpu-vm ssh $VM_NAME --zone $ZONE \
+--worker=all --command "
+if [ $USE_CONDA -eq 1 ]; then
+    echo 'Using conda'
+    source $CONDA_INIT_SH_PATH
+    echo tmp 1
+    conda activate $CONDA_ENV
+    echo activated
+fi
+"
+
+# which python3
+# which pip3
+# /kmh-nfs-us-mount/code/qiao/anaconda3/envs/NNX/bin/python3 -c 'import flax.nnx as nn; print(nn.Linear)'
+
+# /kmh-nfs-us-mount/code/qiao/anaconda3/envs/NNX/bin/python3 -c 'print(114514 + 1919810)'
+
+# /kmh-nfs-us-mount/code/qiao/anaconda3/envs/NNX/bin/python3 -c 'import flax.nnx as nn; print(nn.Linear)'
+# /kmh-nfs-ssd-eu-mount/code/qiao/anaconda3/envs/NNX/bin/python3 -c 'import flax.nnx as nn; print(nn.Linear); print(nn.__file__)'
+
+# python3 -c 'import flax.nnx as nn; print(nn.Linear)'
+
+# pip install wandb
+    # conda activate $CONDA_ENV

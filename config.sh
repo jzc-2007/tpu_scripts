@@ -4,4 +4,4 @@ export MNIST="/kmh-nfs-ssd-eu-mount/code/qiao/data/" # path to the mnist data
 # export OWN_CONDA_ENV_NAME=NNX # A useable env at your V3-8
 export OWN_CONDA_ENV_NAME=NNX # A useable env at your V3-8
 export TASKNAME=sqa_Flow_matching
-export WANDB_API_KEY=73f8ff40bb7f8589e9bd1f476196a896f662cdfa
+export WANDB_API_KEY=73f8ff40bb7f8589e9bd1f476196a896f662cdfaa

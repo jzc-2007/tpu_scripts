@@ -21,5 +21,5 @@ cd $STAGEDIR
 echo 'Current dir: '`pwd`
 # ------------------------------------------------
 
-source run_remote.sh
+bash run_remote.sh
 cd $HERE
