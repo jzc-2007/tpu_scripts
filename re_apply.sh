@@ -2,6 +2,8 @@ source ka.sh
 
 if [[ $VM_NAME == *"v3"* ]]; then
     export ACCEL_TP="v3-32"
+elif [[ $VM_NAME == *"v4"* ]]; then
+    export ACCEL_TP="v4-32"
 else
     export ACCEL_TP="v2-32"
 fi
