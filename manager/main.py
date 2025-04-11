@@ -147,14 +147,16 @@ class SheetManager:
             
             # fix invalid cell
             if status_to_write == "running":
+                replace = True
                 if user_to_write in ["闲的", "UNKNOWN"]:
                     # unknown user uses this card
-                    script_to_write += "[Invalid cell] The ka is running but the user is unknown! "; replace = True
+                    script_to_write += "[Invalid cell] The ka is running but the user is unknown! "
                     user_to_write = "UNKNOWN"
             elif status_to_write == "闲的":
+                replace = True
                 if user_to_write not in ["闲的", "UNKNOWN"]:
                     # this is likely that the person forget to set the status to running/reserved
-                    script_to_write += "[Invalid cell] The status used to not be 'running', we believe this is a mistake. "; replace = True
+                    script_to_write += "[Invalid cell] The status used to not be 'running', we believe this is a mistake. "
                     status_to_write = "reserved"
                 elif user_to_write == "UNKNOWN":
                     # useless
