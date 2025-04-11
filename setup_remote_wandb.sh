@@ -13,10 +13,10 @@ echo $VM_NAME $ZONE
 
 CONDA_ENV=$OWN_CONDA_ENV_NAME
 
-if [[ $USE_CONDA == 1 ]]; then
-    CONDA_PATH=$(which conda)
-    CONDA_INIT_SH_PATH=$(dirname $CONDA_PATH)/../etc/profile.d/conda.sh
-fi
+# if [[ $USE_CONDA == 1 ]]; then
+#     CONDA_PATH=$(which conda)
+#     CONDA_INIT_SH_PATH=$(dirname $CONDA_PATH)/../etc/profile.d/conda.sh
+# fi
 
 gcloud compute tpus tpu-vm ssh $VM_NAME --zone $ZONE \
     --worker=all --command "
