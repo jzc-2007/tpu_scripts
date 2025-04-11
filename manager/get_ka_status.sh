@@ -19,17 +19,15 @@ if [[ $ZONE == *"europe"* ]]; then
     export USE_CONDA=1
 else
     export DATA_ROOT="kmh-nfs-us-mount"
-    export USE_CONDA=2
+    export USE_CONDA=1
     # export TFDS_DATA_DIR='gs://kmh-gcp-us-central2/tensorflow_datasets'  # use this for imagenet
     export TFDS_DATA_DIR='/kmh-nfs-us-mount/data/tensorflow_datasets'
 fi
 
 if [[ $USE_CONDA == 1 ]]; then
-    export CONDA_PATH=$(which conda)
-    export CONDA_INIT_SH_PATH=$(dirname $CONDA_PATH)/../etc/profile.d/conda.sh
+    export CONDA_INIT_SH_PATH=/$DATA_ROOT/code/qiao/anaconda3/etc/profile.d/conda.sh
     export CONDA_ENV=NNX
 fi
-
 # if is preemptible, check if it is preempted
 
 if [[ $VM_NAME == *"preemptible"* ]]; then

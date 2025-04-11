@@ -9,7 +9,7 @@ def get_zone(ka):
         return ZONE_US_2
     elif "v3" in ka:
         return ZONE_EU
-    elif ka in ['v2-32-preemptible-1', 'v2-32-4']:
+    elif "v2-32-preemptible-2" in ka or "v2-32-4" in ka:
         return ZONE_EU
     else:
         return ZONE_US
