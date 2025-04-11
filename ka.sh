@@ -1,6 +1,6 @@
 # 卡.sh
 
-# This is the newest script on 2025.4.11 12:16
+# This is the newest script on 2025.4.11 14:10
 source config.sh
 
 if [ -z "$OWN_CONDA_ENV_NAME" ]; then
@@ -29,10 +29,10 @@ fi
 # export VM_NAME=kmh-tpuvm-v2-32-8
 # export VM_NAME=kmh-tpuvm-v3-32-1
 # export VM_NAME=kmh-tpuvm-v4-8-6
-# export VM_NAME=kmh-tpuvm-v2-32-preemptible-1
+export VM_NAME=kmh-tpuvm-v2-32-preemptible-1
 # export VM_NAME=kmh-tpuvm-v2-32-preemptible-2
 # export VM_NAME=kmh-tpuvm-v3-32-preemptible-1
-export VM_NAME=kmh-tpuvm-v4-32-preemptible-1
+# export VM_NAME=kmh-tpuvm-v4-32-preemptible-1
 # export VM_NAME=kmh-tpuvm-v4-32-preemptible-2
 # export VM_NAME=kmh-tpuvm-v3-32-11
 # export VM_NAME=kmh-tpuvm-v3-32-12
@@ -50,7 +50,7 @@ elif [[ $VM_NAME == *"v3"* ]]; then
 else
     if [[ $VM_NAME == *"v2-32-4"* ]]; then
         export ZONE=europe-west4-a
-    elif [[ $VM_NAME == *"v2-32-preemptible-1"* ]]; then
+    elif [[ $VM_NAME == *"v2-32-preemptible-2"* ]]; then
         export ZONE=europe-west4-a
     else
         export ZONE=us-central1-a

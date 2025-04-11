@@ -25,8 +25,8 @@ else
 fi
 
 if [[ $USE_CONDA == 1 ]]; then
-    export CONDA_INIT_SH_PATH=/$DATA_ROOT/code/qiao/anaconda3/etc/profile.d/conda.sh
-    export CONDA_ENV=NNX
+    export CONDA_PY_PATH=/$DATA_ROOT/code/qiao/anaconda3/envs/NNX/bin/python
+    echo $CONDA_PY_PATH
 fi
 # if is preemptible, check if it is preempted
 
@@ -41,12 +41,7 @@ fi
 
 gcloud compute tpus tpu-vm ssh $VM_NAME --zone $ZONE \
 --worker=all --command "
-if [ \"$USE_CONDA\" -eq 1 ]; then
-    echo 'Using conda'
-    source $CONDA_INIT_SH_PATH
-    conda activate $CONDA_ENV
-fi
-python3 -c 'import jax; import flax.linen as nn; print(nn.Dense)'
+$CONDA_PY_PATH -c 'import jax; import flax.linen as nn; print(nn.Dense)'
 "
 
 # check whether return code is 0
@@ -59,16 +54,11 @@ fi
 
 gcloud compute tpus tpu-vm ssh $VM_NAME --zone $ZONE \
 --worker=all --command "
-if [ \"$USE_CONDA\" -eq 1 ]; then
-    echo 'Using conda'
-    source $CONDA_INIT_SH_PATH
-    conda activate $CONDA_ENV
-fi
-python3 -c 'import jax; print(jax.devices())'
+sudo lsof -w /dev/accel0
 "
 
 # check whether return code is 0
-if [ $? -eq 0 ]; then
+if [ ! $? -eq 0 ]; then
     echo "TPU VM $VM_NAME is xian"
     exit 0
 else
