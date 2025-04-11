@@ -29,8 +29,8 @@ fi
 # export VM_NAME=kmh-tpuvm-v2-32-8
 # export VM_NAME=kmh-tpuvm-v3-32-1
 # export VM_NAME=kmh-tpuvm-v4-8-6
-export VM_NAME=kmh-tpuvm-v2-32-preemptible-1
-# export VM_NAME=kmh-tpuvm-v2-32-preemptible-2
+# export VM_NAME=kmh-tpuvm-v2-32-preemptible-1
+export VM_NAME=kmh-tpuvm-v2-32-preemptible-2
 # export VM_NAME=kmh-tpuvm-v3-32-preemptible-1
 # export VM_NAME=kmh-tpuvm-v4-32-preemptible-1
 # export VM_NAME=kmh-tpuvm-v4-32-preemptible-2

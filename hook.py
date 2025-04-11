@@ -55,13 +55,14 @@ for sh_file in sh_files:
         if os.path.abspath(target) != os.path.abspath(os.path.join(PWD, sh_file)):
             raise RuntimeError(f'{sh_file} is a link to {target}, but it should be a link to {os.path.join(PWD, sh_file)}')
         else:
-            print(f'{INFO} {sh_file} is a link to {target}, which is automatically correct')
+            # print(f'{INFO} {sh_file} is a link to {target}, which is automatically correct')
             continue
     else:
         if sh_file not in cur_sh_files:
             print(f'{WARNING} skipped {sh_file} because it is not in the provided scripts. Gonna mark it as old...')
             # rename
-            os.rename(abs_sh_file, os.path.join(dest, f'old_{sh_file}'))
+            if not sh_file.startswith('old_'):
+                os.rename(abs_sh_file, os.path.join(dest, f'old_{sh_file}'))
         else:
             print(f'{INFO} removing old script {sh_file}...')
             os.remove(abs_sh_file)
