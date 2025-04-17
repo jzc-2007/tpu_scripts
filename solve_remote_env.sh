@@ -1,10 +1,15 @@
-source ka.sh # import VM_NAME, ZONE
+if [ -z "$2" ]; then
+	source ka.sh $1 # import VM_NAME, ZONE
+else
+	echo use command line arguments
+	export VM_NAME=$1
+	export ZONE=$2
+fi
 
 echo 'solve'
 gcloud compute tpus tpu-vm ssh $VM_NAME --zone $ZONE --worker=all \
     --command "
-alias python=$CONDA_PY_PATH
-alias pip=$CONDA_PIP_PATH
+ ls /tmp
 " # &> /dev/null
 echo 'solved!'
 # ls /home/sqa

@@ -1,8 +1,24 @@
 # Stage code and run job in a remote TPU VM
-source ka.sh
+# if [ -z "$2" ]; then
+# 	source ka.sh $1 # import VM_NAME, ZONE
+# else
+# 	echo use command line arguments
+# 	export VM_NAME=$1
+# 	export ZONE=$2
+# fi
 # ------------------------------------------------
 # Copy all code files to staging
 # ------------------------------------------------
+local PASS_KA=0
+if [ -n "$2" ]; then
+	if [ "$2" == "ka="* ]; then
+		ka=${2#*=}
+		export VM_NAME=$ka
+		export PASS_KA=1
+	fi
+fi
+
+source ka.sh $VM_NAME
 now=`date '+%y%m%d%H%M%S'`
 salt=`head /dev/urandom | tr -dc a-z0-9 | head -c6`
 git config --global --add safe.directory $(pwd)
@@ -21,5 +37,10 @@ cd $STAGEDIR
 echo 'Current dir: '`pwd`
 # ------------------------------------------------
 
-bash run_remote.sh
+if [ $PASS_KA -eq 0 ]; then
+	source run_remote.sh ${@:1}
+else
+	source run_remote.sh ${@:2}
+fi
+
 cd $HERE

@@ -1,5 +1,17 @@
-source ka.sh # import VM_NAME, ZONE
+# if [ -z "$2" ]; then
+# 	source ka.sh $1 # import VM_NAME, ZONE
+# else
+# 	echo use command line arguments
+# 	export VM_NAME=$1
+# 	export ZONE=$2
+# fi
 
+if [ -n "$1" ]; then
+	export VM_NAME=$1
+	source ka.sh $1
+else
+	source ka.sh
+fi
 
 echo 'To kill jobs in: '$VM_NAME 'in' $ZONE' after 2s...'
 sleep 2s
