@@ -1,15 +1,6 @@
 # Your configurations here
 source config.sh
 CONDA_ENV=$OWN_CONDA_ENV_NAME
-############# No need to modify #############
-# for i in {1..20}; do echo "Do you remember to use TMUX?"; done
-# if [ -z "$2" ]; then
-# 	source ka.sh $1 # import VM_NAME, ZONE
-# else
-# 	echo use command line arguments
-# 	export VM_NAME=$1
-# 	export ZONE=$2
-# fi
 
 echo Running at $VM_NAME $ZONE
 
@@ -23,6 +14,12 @@ sudo mkdir -p ${LOGDIR}
 sudo chmod 777 -R ${LOGDIR}
 echo 'Log dir: '$LOGDIR
 echo 'Staging dir: '$STAGEDIR
+
+current_window=`tmux display-message -p '#S:#I'`
+echo "Current tmux window: $current_window"
+
+echo 'tpu: '$VM_NAME
+tpu upd-log $current_window $LOGDIR $VM_NAME $now
 
 export cmd="cd $STAGEDIR
 echo 'Current dir: '
@@ -39,4 +36,13 @@ echo "Running command: $cmd"
 gcloud compute tpus tpu-vm ssh $VM_NAME --zone $ZONE \
     --worker=all --command "${cmd}" 2>&1 | tee -a $LOGDIR/output.log
 
+if grep -q "wandb: Run history:" $LOGDIR/output.log; then
+    echo "Job completed successfully"
+    tpu finish-job $current_window
+else
+    echo "Job failed"
+fi
+
+
+# tpu finish-job $current_window
 ############# No need to modify [END] #############
