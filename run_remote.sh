@@ -27,9 +27,12 @@ pwd
 $CONDA_PY_PATH main.py --workdir=${LOGDIR} --mode=remote_run --config=configs/load_config.py:remote_run "
 
 # add all the configs pass in to cmd
-for arg in "$@"; do
-    export cmd="$cmd $arg"
-done
+for arg in "$@"; 
+    do
+        if [[ $arg == --config* ]]; then
+            export cmd="$cmd $arg"
+        fi
+    done
 
 echo "Running command: $cmd"
 
