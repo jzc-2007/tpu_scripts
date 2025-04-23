@@ -12,8 +12,7 @@
 PASS_KA=0
 
 if [ -n "$1" ]; then
-	echo "1st arg: $1"
-	echo "2nd arg: $2"
+	echo "1st arg(ka): $1"
 	if [[ "$1" == ka=* ]]; then
 		ka=${1#*=}
 		export VM_NAME=$ka
