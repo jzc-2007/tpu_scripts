@@ -1,6 +1,6 @@
 # 卡.sh
 
-# This is the newest script on 2025.4.11 14:10
+# This is the newest script online in 2025.4.11 14:10
 source config.sh
 
 if [ -z "$OWN_CONDA_ENV_NAME" ]; then
