@@ -30,7 +30,7 @@ export STAGEDIR=/$DATA_ROOT/staging/$USER/${now}-${salt}-${commitid}-code
 
 echo 'Staging files...'
 rsync -av . $STAGEDIR --exclude=tmp --exclude=.git --exclude=__pycache__ --exclude="*.png" --exclude="history" --exclude=wandb --exclude="zhh_code" --exclude="zhh"
-cp -r /kmh-nfs-ssd-eu-mount/code/hanhong/MyFile/research_utils/Jax/zhh $STAGEDIR
+# cp -r /kmh-nfs-ssd-eu-mount/code/hanhong/MyFile/research_utils/Jax/zhh $STAGEDIR
 echo 'Done staging.'
 
 sudo chmod 777 -R $STAGEDIR
@@ -40,8 +40,12 @@ echo 'Current dir: '`pwd`
 # ------------------------------------------------
 
 if [ $PASS_KA -eq 0 ]; then
+	echo "parameters: "
+	echo ${@:1}
 	source run_remote.sh ${@:1}
 else
+	echo "parameters: "
+	echo ${@:2}
 	source run_remote.sh ${@:2}
 fi
 
