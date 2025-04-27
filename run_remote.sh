@@ -38,7 +38,7 @@ for arg in "$@";
 echo "Running command: $cmd"
 
 gcloud compute tpus tpu-vm ssh $VM_NAME --zone $ZONE \
-    --worker=all --command "${cmd}" 2>&1 | tee -a $LOGDIR/output.log
+    --worker=all --ssh-flag="-n" --command "${cmd}" 2>&1 | tee -a $LOGDIR/output.log
 
 if grep -q "wandb: Run history:" $LOGDIR/output.log; then
     echo "Job completed successfully"
