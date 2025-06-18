@@ -45,6 +45,7 @@ if grep -q "wandb: Run history:" $LOGDIR/output.log; then
     tpu finish-job $current_window
 else
     echo "Job failed"
+    tpu fail-job $current_window
 fi
 
 
