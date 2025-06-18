@@ -28,6 +28,7 @@ if [ -z "$1" ]; then
 export VM_NAME=gaoduile
 # export VM_NAME=kmh-tpuvm-v2-32-7
 # export VM_NAME=kmh-tpuvm-v2-32-8
+# export VM_NAME=kmh-tpuvm-v2-128-1
 # export VM_NAME=kmh-tpuvm-v3-32-1
 # export VM_NAME=kmh-tpuvm-v2-32-preemptible-1
 # export VM_NAME=kmh-tpuvm-v2-32-preemptible-2
