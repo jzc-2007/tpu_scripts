@@ -1,2 +1,3 @@
 manager/secret.json
 **/__pycache__/
+.nfs*
