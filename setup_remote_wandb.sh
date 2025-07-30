@@ -21,6 +21,12 @@ else
             export ZONE=us-central1-a
         fi
     fi
+    if [[ $VM_NAME == *"v6e"* ]]; then
+        export ZONE=us-east1-d
+    fi
+    if [[ $VM_NAME == *"v5e"* ]]; then
+        export ZONE=us-central1-a
+    fi
 
     if [[ $ZONE == *"europe"* ]]; then
         export DATA_ROOT="kmh-nfs-ssd-eu-mount"

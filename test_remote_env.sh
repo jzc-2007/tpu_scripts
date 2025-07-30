@@ -22,6 +22,12 @@ else
             export ZONE=us-central1-a
         fi
     fi
+    if [[ $VM_NAME == *"v6e"* ]]; then
+        export ZONE=us-east1-d
+    fi
+    if [[ $VM_NAME == *"v5e"* ]]; then
+        export ZONE=us-central1-a
+    fi
 
     if [[ $ZONE == *"europe"* ]]; then
         export DATA_ROOT="kmh-nfs-ssd-eu-mount"
@@ -46,6 +52,7 @@ echo $VM_NAME $ZONE
 
 gcloud compute tpus tpu-vm ssh $VM_NAME --zone $ZONE \
 --worker=all --command "
+$CONDA_PY_PATH -c 'from jax.lib import xla_bridge; print(xla_bridge.get_backend().platform)'
 $CONDA_PY_PATH -c 'import jax; print(jax.devices())'
 $CONDA_PY_PATH -c 'import flax.nnx as nn; print(nn.Linear); print(nn.__file__)'
 "
