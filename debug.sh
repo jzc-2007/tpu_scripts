@@ -1,6 +1,8 @@
 source config.sh
 rm -rf tmp # Comment this line if you want to reload (usually not the case)
 
+# test push access
+
 CONDA_PATH=$(which conda)
 CONDA_INIT_SH_PATH=$(dirname $CONDA_PATH)/../etc/profile.d/conda.sh
 LOGDIR=$(pwd)/tmp

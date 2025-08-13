@@ -8,19 +8,19 @@ else
     export VM_NAME=$1
     export ZONE=$2
 
-    if [[ $VM_NAME == *"v4"* ]]; then
-        export ZONE=us-central2-b
-    elif [[ $VM_NAME == *"v3"* ]]; then
-        export ZONE=europe-west4-a
-    else
-        if [[ $VM_NAME == *"v2-32-4"* ]]; then
-            export ZONE=europe-west4-a
-        elif [[ $VM_NAME == *"v2-32-preemptible-2"* ]]; then
-            export ZONE=europe-west4-a
-        else
-            export ZONE=us-central1-a
-        fi
-    fi
+    # if [[ $VM_NAME == *"v4"* ]]; then
+    #     export ZONE=us-central2-b
+    # elif [[ $VM_NAME == *"v3"* ]]; then
+    #     export ZONE=europe-west4-a
+    # else
+    #     if [[ $VM_NAME == *"v2-32-4"* ]]; then
+    #         export ZONE=europe-west4-a
+    #     elif [[ $VM_NAME == *"v2-32-preemptible-2"* ]]; then
+    #         export ZONE=europe-west4-a
+    #     else
+    #         export ZONE=us-central1-a
+    #     fi
+    # fi
 
     if [[ $ZONE == *"europe"* ]]; then
         export DATA_ROOT="kmh-nfs-ssd-eu-mount"

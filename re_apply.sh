@@ -4,8 +4,15 @@ if [[ $VM_NAME == *"v3"* ]]; then
     export ACCEL_TP="v3-32"
 elif [[ $VM_NAME == *"v4"* ]]; then
     export ACCEL_TP="v4-32"
+elif [[ $VM_NAME == *"v6e"* ]]; then
+	export ACCEL_TP="v6e-32"
 else
     export ACCEL_TP="v2-32"
+fi
+
+export V=tpu-ubuntu2204-base
+if [[ $VM_NAME == *"v6e"* ]]; then
+	export V=v2-alpha-tpuv6e
 fi
 
 if [[ $VM_NAME == *"preemptible"* ]]; then
@@ -14,7 +21,7 @@ if [[ $VM_NAME == *"preemptible"* ]]; then
     gcloud compute tpus tpu-vm create $VM_NAME \
     --zone=$ZONE \
     --accelerator-type=$ACCEL_TP \
-    --version=tpu-ubuntu2204-base \
+    --version=$V \
     --preemptible
     if [ "$(gcloud compute tpus describe $VM_NAME --zone=$ZONE --format="value(state)")" == "READY" ]; then
         echo "Now, TPU VM $VM_NAME is good, ready to use"

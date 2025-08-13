@@ -54,4 +54,5 @@ gcloud compute tpus tpu-vm ssh $VM_NAME --zone $ZONE \
 $CONDA_PY_PATH -m wandb login $WANDB_API_KEY
 sleep 1
 $CONDA_PY_PATH -m wandb login
+echo \$?
 "
