@@ -53,7 +53,11 @@ for sh_file in sh_files:
         # get the link target
         target = os.readlink(abs_sh_file)
         if os.path.abspath(target) != os.path.abspath(os.path.join(PWD, sh_file)):
-            raise RuntimeError(f'{sh_file} is a link to {target}, but it should be a link to {os.path.join(PWD, sh_file)}')
+            print(f'{INFO} removing old script {sh_file}...')
+            os.remove(abs_sh_file)
+            os.symlink(os.path.join(PWD, sh_file), abs_sh_file)
+            print(f'{INFO} Created symlink for {sh_file} -> {os.path.join(PWD, sh_file)}')
+            # raise RuntimeError(f'{sh_file} is a link to {target}, but it should be a link to {os.path.join(PWD, sh_file)}')
         else:
             # print(f'{INFO} {sh_file} is a link to {target}, which is automatically correct')
             continue
