@@ -63,6 +63,13 @@ else
         export ZONE=us-central1-a
     fi
 fi
+if [[ $VM_NAME == *"v6e"* ]]; then
+    export ZONE=us-east1-d
+    export OWN_CONDA_ENV_NAME=NNX6e
+fi
+if [[ $VM_NAME == *"v5e"* ]]; then
+    export ZONE=us-central1-a
+fi
 
 # DATA_ROOT: the disk mounted
 # FAKE_DATA_ROOT: the fake data (imagenet_fake) link
