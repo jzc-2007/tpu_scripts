@@ -3,7 +3,7 @@ salt=`head /dev/urandom | tr -dc a-z0-9 | head -c6`
 git config --global --add safe.directory $(pwd)
 HERE=$(pwd)
 commitid=`git show -s --format=%h`  # latest commit id; may not be exactly the same as the commit
-export STAGEDIR=/kmh-nfs-ssd-eu-mount/staging/$USER/${now}-${salt}-${commitid}-code
+export STAGEDIR=/kmh-nfs-ssd-us-mount/staging/$USER/${now}-${salt}-${commitid}-code
 
 echo 'Staging files...'
 rsync -a . $STAGEDIR --exclude=tmp --exclude=.git --exclude=__pycache__ --exclude="*.png" --exclude="history" --exclude=wandb --exclude="zhh_code" --exclude="zhh"
