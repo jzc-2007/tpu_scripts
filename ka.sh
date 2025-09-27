@@ -81,15 +81,15 @@ if [[ $ZONE == *"europe"* ]]; then
     export TFDS_DATA_DIR='/kmh-nfs-ssd-eu-mount/code/hanhong/dot/tensorflow_datasets'
     export USE_CONDA=1
 else
-    export DATA_ROOT="kmh-nfs-us-mount"
+    export DATA_ROOT="kmh-nfs-ssd-us-mount"
     export USE_CONDA=1
     # export TFDS_DATA_DIR='gs://kmh-gcp-us-central2/tensorflow_datasets'  # use this for imagenet
     export TFDS_DATA_DIR='/kmh-nfs-us-mount/data/tensorflow_datasets'
 fi
 
 if [[ $USE_CONDA == 1 ]]; then
-    export CONDA_PY_PATH=/$DATA_ROOT/code/qiao/anaconda3/envs/$OWN_CONDA_ENV_NAME/bin/python
-    export CONDA_PIP_PATH=/$DATA_ROOT/code/qiao/anaconda3/envs/$OWN_CONDA_ENV_NAME/bin/pip
+    export CONDA_PY_PATH=/kmh-nfs-ssd-us-mount/code/eva/miniforge3/bin/python
+    export CONDA_PIP_PATH=/kmh-nfs-ssd-us-mount/code/eva/miniforge3/bin/pip
     echo $CONDA_PY_PATH
     echo $CONDA_PIP_PATH
 fi
