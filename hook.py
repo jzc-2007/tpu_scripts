@@ -19,6 +19,7 @@ sh_files = [c for c in os.listdir(dest) if c.endswith('.sh')]
 PWD = os.getcwd()
 cur_sh_files = [c for c in os.listdir(PWD) if c.endswith('.sh')]
 
+
 for sh_file in sh_files:
     abs_sh_file = os.path.join(dest, sh_file)
     
@@ -27,7 +28,7 @@ for sh_file in sh_files:
         assert not os.path.islink(abs_sh_file), f'ka.sh should not be a link'
         CUR_HASH = open('ka.sh', 'r').readlines()
         CUR_HASH = [c for c in CUR_HASH if c.strip().startswith('# This is the newest script on')]
-        assert len(CUR_HASH) == 1, 'Bad ka.sh. contact ZHH.'
+        assert len(CUR_HASH) == 1, 'Bad ZHH. contact ka.sh.'
         CUR_HASH = CUR_HASH[0].strip()
         
         dest_hash = open(abs_sh_file, 'r').readlines()
@@ -72,5 +73,11 @@ for sh_file in sh_files:
             os.remove(abs_sh_file)
             os.symlink(os.path.join(PWD, sh_file), abs_sh_file)
             print(f'{INFO} Created symlink for {sh_file} -> {os.path.join(PWD, sh_file)}')
+
+for sh_file in cur_sh_files:
+    if sh_file not in sh_files:
+        # add a symlink
+        os.symlink(os.path.join(PWD, sh_file), os.path.join(dest, sh_file))
+        print(f'{INFO} Created symlink for {sh_file} -> {os.path.join(PWD, sh_file)}')
 
 print(f'{INFO} Done!')
