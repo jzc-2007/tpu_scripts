@@ -31,10 +31,10 @@ sudo mount -o vers=3 10.26.72.146:/kmh_nfs_us /kmh-nfs-us-mount
 sudo chmod go+rw /kmh-nfs-us-mount
 ls /kmh-nfs-us-mount
 
-sudo mkdir -p /kmh-nfs-ssd-eu-mount
-sudo mount -o vers=3 10.150.179.250:/kmh_nfs_ssd_eu /kmh-nfs-ssd-eu-mount
-sudo chmod go+rw /kmh-nfs-ssd-eu-mount
-ls /kmh-nfs-ssd-eu-mount
+sudo mkdir -p /kmh-nfs-ssd-us-mount
+sudo mount -o vers=3 10.97.81.98:/kmh_nfs_ssd_us /kmh-nfs-ssd-us-mount
+sudo chmod go+rw /kmh-nfs-ssd-us-mount
+ls /kmh-nfs-ssd-us-mount
 
 "
 

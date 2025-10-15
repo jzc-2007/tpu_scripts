@@ -42,7 +42,7 @@ else
     fi
 
     if [[ $USE_CONDA == 1 ]]; then
-        export CONDA_PY_PATH=/$DATA_ROOT/code/qiao/anaconda3/envs/$OWN_CONDA_ENV_NAME/bin/python
+        export CONDA_PY_PATH=/kmh-nfs-ssd-us-mount/code/eva/miniforge3/bin/python
         echo $CONDA_PY_PATH
     fi
 fi
