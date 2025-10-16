@@ -10,6 +10,7 @@
 # Copy all code files to staging
 # ------------------------------------------------
 PASS_KA=0
+PASS_ZONE=0
 
 if [ -n "$1" ]; then
 	echo "1st arg(ka): $1"
@@ -17,10 +18,20 @@ if [ -n "$1" ]; then
 		ka=${1#*=}
 		export VM_NAME=$ka
 		export PASS_KA=1
+
+		if [ -n "$2" ]; then
+			echo "2nd arg(zone): $2"
+			if [[ "$2" == zone=* ]]; then
+				zone=${2#*=}
+				export ZONE=$zone
+				export PASS_ZONE=1
+			fi
+		fi
+
 	fi
 fi
 
-source ka.sh $VM_NAME
+source ka.sh $VM_NAME $ZONE
 now=`date '+%y%m%d%H%M%S'`
 salt=`head /dev/urandom | tr -dc a-z0-9 | head -c6`
 git config --global --add safe.directory $(pwd)
@@ -43,10 +54,14 @@ if [ $PASS_KA -eq 0 ]; then
 	echo "parameters: "
 	echo ${@:1}
 	source run_remote.sh ${@:1}
-else
+elif [ $PASS_ZONE -eq 0 ]; then
 	echo "parameters: "
 	echo ${@:2}
 	source run_remote.sh ${@:2}
+else
+	echo "parameters: "
+	echo ${@:3}
+	source run_remote.sh ${@:3}
 fi
 
 cd $HERE
