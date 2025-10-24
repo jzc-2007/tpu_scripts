@@ -47,7 +47,7 @@ echo 'Done staging.'
 sudo chmod 777 -R $STAGEDIR
 
 cd $STAGEDIR
-echo 'Current dir: '`pwd`
+# echo 'Current dir: '`pwd`
 # ------------------------------------------------
 
 if [ $PASS_KA -eq 0 ]; then

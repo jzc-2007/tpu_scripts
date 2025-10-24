@@ -1,19 +1,19 @@
 # 卡.sh
 
-# This is the newest script online in 2025.4.11 14:10
+# This is the newest script on 2025.4.11 14:10
 source config.sh
 
-if [ -z "$OWN_CONDA_ENV_NAME" ]; then
-    echo "Please set your own config.sh. See README for reference"
-    sleep 60
-    exit 1
-fi
+# if [ -z "$OWN_CONDA_ENV_NAME" ]; then
+#     echo "Please set your own config.sh. See README for reference"
+#     sleep 60
+#     exit 1
+# fi
 
-if [ -z "$TASKNAME" ]; then
-    echo "Please set your own config.sh. See README for reference"
-    sleep 60
-    exit 1
-fi
+# if [ -z "$TASKNAME" ]; then
+#     echo "Please set your own config.sh. See README for reference"
+#     sleep 60
+#     exit 1
+# fi
 
 if [ -z "$1" ]; then
 
@@ -25,17 +25,14 @@ if [ -z "$1" ]; then
 # export VM_NAME=kmh-tpuvm-v2-32-4
 # export VM_NAME=kmh-tpuvm-v2-32-5
 # export VM_NAME=kmh-tpuvm-v2-32-6
-export VM_NAME=gaoduile
+# export VM_NAME=gaoduile
 # export VM_NAME=kmh-tpuvm-v2-32-7
 # export VM_NAME=kmh-tpuvm-v2-32-8
-# export VM_NAME=kmh-tpuvm-v2-128-1
 # export VM_NAME=kmh-tpuvm-v3-32-1
 # export VM_NAME=kmh-tpuvm-v2-32-preemptible-1
 # export VM_NAME=kmh-tpuvm-v2-32-preemptible-2
 # export VM_NAME=kmh-tpuvm-v3-32-preemptible-1
 # export VM_NAME=kmh-tpuvm-v4-32-preemptible-yiyang
-# export VM_NAME=kmh-tpuvm-v4-32-preemptible-yiyang2
-# export VM_NAME=kmh-tpuvm-v4-32-preemptible-yiyang3
 # export VM_NAME=kmh-tpuvm-v3-32-5
 # export VM_NAME=kmh-tpuvm-v3-32-11
 # export VM_NAME=kmh-tpuvm-v3-32-12
@@ -43,32 +40,33 @@ export VM_NAME=gaoduile
 # export VM_NAME=kmh-tpuvm-v4-8-1
 # export VM_NAME=kmh-tpuvm-v4-8-2
 # export VM_NAME=kmh-tpuvm-v4-8-6
+export VM_NAME=kmh-tpuvm-v5e-64-spot-gzy-1
 
 #####################################
-else
-    echo ka: use command line arguments
-        export VM_NAME=$1
-fi
-# Zone: your TPU VM zone
-if [[ $VM_NAME == *"v4"* ]]; then
-    export ZONE=us-central2-b
-elif [[ $VM_NAME == *"v3"* ]]; then
-    export ZONE=europe-west4-a
-else
-    if [[ $VM_NAME == *"v2-32-4"* ]]; then
+
+# get zone
+if [ -z "$2" ]; then
+# auto infer zone
+    if [[ $VM_NAME == *"v4"* ]]; then
+        export ZONE=us-central2-b
+    elif [[ $VM_NAME == *"v3"* ]]; then
         export ZONE=europe-west4-a
-    elif [[ $VM_NAME == *"v2-32-preemptible-2"* ]]; then
-        export ZONE=europe-west4-a
+    elif [[ $VM_NAME == *"v6"* ]]; then
+        export ZONE=us-east5-b
     else
-        export ZONE=us-central1-a
+        if [[ $VM_NAME == *"v2-32-4"* ]]; then
+            export ZONE=europe-west4-a
+        elif [[ $VM_NAME == *"v2-32-preemptible-2"* ]]; then
+            export ZONE=europe-west4-a
+        else
+            export ZONE=us-central1-a
+        fi
     fi
-fi
-if [[ $VM_NAME == *"v6e"* ]]; then
-    export ZONE=us-east1-d
-    export OWN_CONDA_ENV_NAME=NNX6e
-fi
-if [[ $VM_NAME == *"v5e"* ]]; then
-    export ZONE=us-central1-a
+
+    echo inferred zone: $ZONE
+else
+    echo zone: use command line arguments
+    export ZONE=$2
 fi
 
 # DATA_ROOT: the disk mounted
@@ -84,12 +82,17 @@ else
     export DATA_ROOT="kmh-nfs-ssd-us-mount"
     export USE_CONDA=1
     # export TFDS_DATA_DIR='gs://kmh-gcp-us-central2/tensorflow_datasets'  # use this for imagenet
-    export TFDS_DATA_DIR='/kmh-nfs-us-mount/data/tensorflow_datasets'
+    export TFDS_DATA_DIR='/kmh-nfs-ssd-us-mount/data/tensorflow_datasets'
 fi
 
 if [[ $USE_CONDA == 1 ]]; then
     export CONDA_PY_PATH=/kmh-nfs-ssd-us-mount/code/eva/miniforge3/bin/python
     export CONDA_PIP_PATH=/kmh-nfs-ssd-us-mount/code/eva/miniforge3/bin/pip
+    echo $CONDA_PY_PATH
+    echo $CONDA_PIP_PATH
+else
+    export CONDA_PY_PATH=python
+    export CONDA_PIP_PATH=pip
     echo $CONDA_PY_PATH
     echo $CONDA_PIP_PATH
 fi
