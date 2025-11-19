@@ -22,6 +22,7 @@ echo "Current tmux window: $current_window"
 
 echo 'tpu: '$VM_NAME
 echo 'window id: '$current_window
+alias tpu='python /kmh-nfs-ssd-us-mount/code/zhichengjiang/working/xibo_tpu_manager/tpu.py'
 tpu upd-log $current_window $LOGDIR $STAGEDIR $VM_NAME $now
 
 export cmd="cd $STAGEDIR
@@ -41,8 +42,6 @@ echo "Running command: $cmd"
 
 gcloud compute tpus tpu-vm ssh $VM_NAME --zone $ZONE \
     --worker=all --ssh-flag="-n" --command "${cmd}" 2>&1 | tee -a $LOGDIR/output.log
-
-alias tpu='python /kmh-nfs-ssd-us-mount/code/zhichengjiang/working/xibo_tpu_manager/tpu.py'
 
 if grep -q "wandb: Run history:" $LOGDIR/output.log; then
     echo "Job completed successfully"

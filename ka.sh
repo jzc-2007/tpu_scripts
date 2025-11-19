@@ -41,6 +41,7 @@ if [ -z "$1" ]; then
 # export VM_NAME=kmh-tpuvm-v4-8-2
 # export VM_NAME=kmh-tpuvm-v4-8-6
 export VM_NAME=kmh-tpuvm-v5e-64-spot-gzy-1
+fi
 
 #####################################
 
