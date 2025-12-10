@@ -28,6 +28,7 @@ tpu upd-log $current_window $LOGDIR $STAGEDIR $VM_NAME $now
 export cmd="cd $STAGEDIR
 echo 'Current dir: '
 pwd
+export GOOGLE_APPLICATION_CREDENTIALS=/kmh-nfs-ssd-us-mount/code/qiao/sqa-sa_do_not_deleet.json
 $CONDA_PY_PATH main.py --workdir=${LOGDIR} --mode=remote_run --config=configs/load_config.py:remote_run "
 
 # add all the configs pass in to cmd

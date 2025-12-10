@@ -9,7 +9,7 @@ fi
 echo 'solve'
 gcloud compute tpus tpu-vm ssh $VM_NAME --zone $ZONE --worker=all \
     --command "
- ls /tmp
+pip show jax
 " # &> /dev/null
 echo 'solved!'
 # ls /home/sqa

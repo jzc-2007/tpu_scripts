@@ -74,14 +74,14 @@ fi
 # FAKE_DATA_ROOT: the fake data (imagenet_fake) link
 # USE_CONDA: 1 for europe, 2 for us (common conda env)
 
-if [[ $ZONE == *"europe"* ]]; then
-    export DATA_ROOT="kmh-nfs-ssd-eu-mount"
+if [[ $ZONE == *"us-central2-b"* ]]; then
+    export DATA_ROOT="kmh-nfs-ssd-us-mount"
     # export TFDS_DATA_DIR='gs://kmh-gcp/tensorflow_datasets'  # use this for imagenet
-    export TFDS_DATA_DIR='/kmh-nfs-ssd-eu-mount/code/hanhong/dot/tensorflow_datasets'
+    export TFDS_DATA_DIR='/kmh-nfs-ssd-us-mount/code/hanhong/dot/tensorflow_datasets'
     export USE_CONDA=1
 else
     export DATA_ROOT="kmh-nfs-ssd-us-mount"
-    export USE_CONDA=1
+    export USE_CONDA=0
     # export TFDS_DATA_DIR='gs://kmh-gcp-us-central2/tensorflow_datasets'  # use this for imagenet
     export TFDS_DATA_DIR='/kmh-nfs-ssd-us-mount/data/tensorflow_datasets'
 fi
